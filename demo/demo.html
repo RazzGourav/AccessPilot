@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scholarship application — AccessPilot Demo</title>
+  <link rel="stylesheet" href="demo.css">
+</head>
+<body>
+  <!-- AccessPilot Golden Site: defects D01–D10 are seeded on purpose. Do not fix by hand. -->
+  <div class="topbar">
+    <span class="brand">Rungta Scholarship Portal</span>
+    <button type="button" class="icon-btn" id="help-btn"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="2"/><text x="10" y="15" text-anchor="middle" font-size="12" fill="currentColor">?</text></svg></button>
+  </div>
+
+  <div class="content">
+    <h1>Merit Scholarship 2026–27</h1>
+    <img src="campus.svg" class="hero">
+
+    <h4>Applicant details</h4>
+    <form id="apply-form" onsubmit="return false">
+      <div class="field">
+        <label for="full-name">Full name</label>
+        <input type="text" id="full-name" name="full-name" autocomplete="name">
+      </div>
+      <div class="field">
+        <input type="email" id="email" name="email" autocomplete="email">
+        <p class="helper" id="email-help">We will send your application number to this address.</p>
+      </div>
+      <div class="field">
+        <label for="course">Course</label>
+        <select id="course" name="course">
+          <option>B.Tech Computer Science</option>
+          <option>BCA</option>
+          <option>MBA</option>
+        </select>
+      </div>
+      <p>Eligibility rules are on the scholarship page. <a href="#rules">Click here</a></p>
+      <div class="fake-btn" onclick="document.getElementById('status').textContent='Application submitted';">Submit application</div>
+      <p id="status" role="status"></p>
+    </form>
+  </div>
+
+  <div class="chat" id="chat-widget">
+    <p class="chat-title">Need help?</p>
+    <button type="button" id="chat-yes">Chat with us</button>
+    <button type="button" id="chat-no">No thanks</button>
+  </div>
+
+  <script>
+    // D08: focus is kept inside the chat widget once it is reached.
+    (function () {
+      var first = document.getElementById('chat-yes');
+      var last = document.getElementById('chat-no');
+      document.getElementById('chat-widget').addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+        e.preventDefault();
+        (document.activeElement === first ? last : first).focus();
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+{
+ "capturedAt": "2026-10-20T18:02:10+00:00",
+ "page": {
+  "width": 1280,
+  "height": 900,
+  "truncated": false
+ },
+ "title": "Scholarship application \u2014 AccessPilot Demo",
+ "passes": 27,
+ "findings": [
+  {
+   "ruleId": "button-name",
+   "impact": "critical",
+   "help": "Buttons must have discernible text",
+   "target": "#help-btn",
+   "wcag": [
+    "4.1.2"
+   ],
+   "box": {
+    "x": 1220,
+    "y": 12,
+    "w": 36,
+    "h": 36
+   },
+   "repairTemplate": "T5",
+   "source": "axe",
+   "explanation": "This button has no accessible name.",
+   "userImpact": "Screen-reader users hear \"button\" without knowing what it does."
+  },
+  {
+   "ruleId": "image-alt",
+   "impact": "critical",
+   "help": "Images must have alternative text",
+   "target": "img",
+   "wcag": [
+    "1.1.1"
+   ],
+   "box": {
+    "x": 344,
+    "y": 175,
+    "w": 592,
+    "h": 222
+   },
+   "repairTemplate": "T2",
+   "source": "axe",
+   "explanation": "This image has no text alternative.",
+   "userImpact": "Screen-reader users miss what the image conveys, or hear a file name."
+  },
+  {
+   "ruleId": "label",
+   "impact": "critical",
+   "help": "Form elements must have labels",
+   "target": "#email",
+   "wcag": [
+    "4.1.2"
+   ],
+   "box": {
+    "x": 344,
+    "y": 555,
+    "w": 592,
+    "h": 42
+   },
+   "repairTemplate": "T1",
+   "source": "axe",
+   "explanation": "This form field has no name that assistive technology can announce.",
+   "userImpact": "Screen-reader users hear only \"edit text\" and cannot tell what to type."
+  },
+  {
+   "ruleId": "color-contrast",
+   "impact": "serious",
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "target": "#email-help",
+   "wcag": [
+    "1.4.3"
+   ],
+   "box": {
+    "x": 344,
+    "y": 601,
+    "w": 592,
+    "h": 21
+   },
+   "repairTemplate": "T3",
+   "source": "axe",
+   "explanation": "The text colour is too close to its background.",
+   "userImpact": "People with low vision or using a screen in sunlight may not be able to read it."
+  },
+  {
+   "ruleId": "html-has-lang",
+   "impact": "serious",
+   "help": "<html> element must have a lang attribute",
+   "target": "html",
+   "wcag": [
+    "3.1.1"
+   ],
+   "box": {
+    "x": 0,
+    "y": 0,
+    "w": 1280,
+    "h": 847
+   },
+   "repairTemplate": "T4",
+   "source": "axe",
+   "explanation": "The page does not declare its language.",
+   "userImpact": "Screen readers may pronounce the text with the wrong language rules."
+  },
+  {
+   "ruleId": "heading-order",
+   "impact": "moderate",
+   "help": "Heading levels should only increase by one",
+   "target": "h4",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 424,
+    "w": 592,
+    "h": 24
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Heading levels skip a level.",
+   "userImpact": "Screen-reader users who navigate by headings may think content is missing."
+  },
+  {
+   "ruleId": "landmark-one-main",
+   "impact": "moderate",
+   "help": "Document should have one main landmark",
+   "target": "html",
+   "wcag": [],
+   "box": {
+    "x": 0,
+    "y": 0,
+    "w": 1280,
+    "h": 847
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "The page has no main landmark.",
+   "userImpact": "Screen-reader users cannot jump straight to the main content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": ".chat-title",
+   "wcag": [],
+   "box": {
+    "x": 1031,
+    "y": 799,
+    "w": 220,
+    "h": 24
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": ".fake-btn",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 763,
+    "w": 172,
+    "h": 44
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": ".field:nth-child(1)",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 469,
+    "w": 592,
+    "h": 70
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": ".field:nth-child(2)",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 555,
+    "w": 592,
+    "h": 67
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": ".field:nth-child(3)",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 638,
+    "w": 592,
+    "h": 69
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": "h1",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 105,
+    "w": 592,
+    "h": 48
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": "h4",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 424,
+    "w": 592,
+    "h": 24
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": "img",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 175,
+    "w": 592,
+    "h": 222
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": "p:nth-child(4)",
+   "wcag": [],
+   "box": {
+    "x": 344,
+    "y": 723,
+    "w": 592,
+    "h": 24
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "region",
+   "impact": "moderate",
+   "help": "All page content should be contained by landmarks",
+   "target": "span",
+   "wcag": [],
+   "box": {
+    "x": 24,
+    "y": 18,
+    "w": 188,
+    "h": 24
+   },
+   "repairTemplate": null,
+   "source": "axe",
+   "explanation": "Some content is outside any landmark region.",
+   "userImpact": "Screen-reader users who jump between landmarks can miss this content."
+  },
+  {
+   "ruleId": "kbd-clickable-not-focusable",
+   "impact": null,
+   "help": "Clickable element is not reachable with the keyboard \u2014 use a <button> or <a>",
+   "target": "div.fake-btn",
+   "wcag": [
+    "2.1.1"
+   ],
+   "box": {
+    "x": 344,
+    "y": 763,
+    "w": 172,
+    "h": 44
+   },
+   "repairTemplate": null,
+   "source": "keyboard-heuristic",
+   "explanation": "This element works with a mouse but cannot be reached with the Tab key.",
+   "userImpact": "Keyboard-only and switch users cannot activate it, so they may not be able to submit the form."
+  },
+  {
+   "ruleId": "kbd-repeated-focus",
+   "impact": null,
+   "help": "Possible focus cycle \u2014 check whether keyboard users can move past this area",
+   "target": "#chat-no, #chat-yes",
+   "wcag": [
+    "2.1.2"
+   ],
+   "box": {
+    "x": 1031,
+    "y": 831,
+    "w": 216,
+    "h": 40
+   },
+   "repairTemplate": null,
+   "source": "keyboard-heuristic",
+   "explanation": "Tab kept moving between the same few elements.",
+   "userImpact": "Keyboard users may be unable to move past this area. Confirm manually."
+  }
+ ],
+ "stops": [
+  {
+   "order": 1,
+   "name": "?",
+   "role": "button",
+   "tag": "button",
+   "repeated": false,
+   "box": {
+    "x": 1220,
+    "y": 12,
+    "w": 36,
+    "h": 36
+   }
+  },
+  {
+   "order": 2,
+   "name": "Full name",
+   "role": "textbox",
+   "tag": "input",
+   "repeated": false,
+   "box": {
+    "x": 344,
+    "y": 497,
+    "w": 592,
+    "h": 42
+   }
+  },
+  {
+   "order": 3,
+   "name": "",
+   "role": "textbox",
+   "tag": "input",
+   "repeated": false,
+   "box": {
+    "x": 344,
+    "y": 555,
+    "w": 592,
+    "h": 42
+   }
+  },
+  {
+   "order": 4,
+   "name": "Course",
+   "role": "combobox",
+   "tag": "select",
+   "repeated": false,
+   "box": {
+    "x": 344,
+    "y": 666,
+    "w": 592,
+    "h": 41
+   }
+  },
+  {
+   "order": 5,
+   "name": "Click here",
+   "role": "link",
+   "tag": "a",
+   "repeated": false,
+   "box": {
+    "x": 653,
+    "y": 724,
+    "w": 69,
+    "h": 21
+   }
+  },
+  {
+   "order": 6,
+   "name": "Chat with us",
+   "role": "button",
+   "tag": "button",
+   "repeated": false,
+   "box": {
+    "x": 1031,
+    "y": 831,
+    "w": 111,
+    "h": 40
+   }
+  },
+  {
+   "order": 7,
+   "name": "No thanks",
+   "role": "button",
+   "tag": "button",
+   "repeated": false,
+   "box": {
+    "x": 1151,
+    "y": 831,
+    "w": 96,
+    "h": 40
+   }
+  },
+  {
+   "order": 8,
+   "name": "Chat with us",
+   "role": "button",
+   "tag": "button",
+   "repeated": true,
+   "box": {
+    "x": 1031,
+    "y": 831,
+    "w": 111,
+    "h": 40
+   }
+  },
+  {
+   "order": 9,
+   "name": "No thanks",
+   "role": "button",
+   "tag": "button",
+   "repeated": true,
+   "box": {
+    "x": 1151,
+    "y": 831,
+    "w": 96,
+    "h": 40
+   }
+  },
+  {
+   "order": 10,
+   "name": "Chat with us",
+   "role": "button",
+   "tag": "button",
+   "repeated": true,
+   "box": {
+    "x": 1031,
+    "y": 831,
+    "w": 111,
+    "h": 40
+   }
+  },
+  {
+   "order": 11,
+   "name": "No thanks",
+   "role": "button",
+   "tag": "button",
+   "repeated": true,
+   "box": {
+    "x": 1151,
+    "y": 831,
+    "w": 96,
+    "h": 40
+   }
+  }
+ ],
+ "trace": [
+  {
+   "step": "target_validated",
+   "status": "ok",
+   "durationMs": 0,
+   "detail": "consent recorded"
+  },
+  {
+   "step": "browser_launched",
+   "status": "ok",
+   "durationMs": 102,
+   "detail": ""
+  },
+  {
+   "step": "page_loaded",
+   "status": "ok",
+   "durationMs": 68,
+   "detail": "HTTP 200"
+  },
+  {
+   "step": "axe_completed",
+   "status": "ok",
+   "durationMs": 185,
+   "detail": "8 rules with violations"
+  },
+  {
+   "step": "keyboard_walk_completed",
+   "status": "ok",
+   "durationMs": 84,
+   "detail": "11 stops, ended: repeated_focus_cycle"
+  },
+  {
+   "step": "page_captured",
+   "status": "ok",
+   "durationMs": 71,
+   "detail": "1280\u00d7900 px, kept in memory only"
+  }
+ ],
+ "timings": {
+  "scanMs": 1361,
+  "agentMs": 5,
+  "applyAndRetestMs": 4131,
+  "aiUsed": false
+ },
+ "repair": {
+  "template": "T1",
+  "diff": "--- a/demo/demo.html\n+++ b/demo/demo.html\n@@ -25,4 +25,5 @@\n       </div>\n       <div class=\"field\">\n+        <label for=\"email\">Email address</label>\n         <input type=\"email\" id=\"email\" name=\"email\" autocomplete=\"email\">\n         <p class=\"helper\" id=\"email-help\">We will send your application number to this address.</p>\n",
+  "status": "verified",
+  "reason": "Verified by automated re-test: the originating check no longer reports this issue and no regression appeared.",
+  "resolved": 1,
+  "remaining": 18,
+  "new": 0,
+  "controlNew": 0,
+  "nameBefore": "",
+  "nameAfter": "Email address",
+  "boxBefore": {
+   "x": 344,
+   "y": 555,
+   "w": 592,
+   "h": 42
+  },
+  "boxAfter": {
+   "x": 344,
+   "y": 583,
+   "w": 592,
+   "h": 42
+  },
+  "afterPage": {
+   "width": 1280,
+   "height": 900,
+   "truncated": false
+  }
+ }
+}

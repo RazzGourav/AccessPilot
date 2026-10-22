@@ -1,0 +1,17 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; color: #1f2328; background: #ffffff; line-height: 1.5; }
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; background: #12355b; color: #ffffff; }
+.brand { font-weight: 600; }
+.icon-btn { background: transparent; border: 1px solid #ffffff; color: #ffffff; border-radius: 50%; width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.content { max-width: 640px; margin: 0 auto; padding: 24px; }
+.hero { width: 100%; height: auto; border-radius: 8px; }
+.field { margin-bottom: 16px; }
+label { display: block; font-weight: 600; margin-bottom: 4px; }
+input, select { width: 100%; padding: 8px; border: 1px solid #6e7781; border-radius: 4px; font: inherit; }
+.helper { margin: 4px 0 0; font-size: 0.875rem; color: #b4b4b4; }
+.fake-btn { display: inline-block; padding: 10px 20px; background: #12355b; color: #ffffff; border-radius: 4px; cursor: pointer; }
+.chat { position: fixed; right: 16px; bottom: 16px; padding: 12px; background: #f6f8fa; border: 1px solid #6e7781; border-radius: 8px; }
+.chat-title { margin: 0 0 8px; font-weight: 600; }
+.chat button { margin-right: 4px; padding: 6px 10px; font: inherit; }
+a { color: #0550ae; }
+:focus-visible { outline: 3px solid #bf3989; outline-offset: 2px; }

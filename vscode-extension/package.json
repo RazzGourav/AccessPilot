@@ -1,0 +1,79 @@
+{
+  "name": "accesspilot-vscode",
+  "displayName": "AccessPilot Accessibility Intelligence",
+  "description": "Multi-agent accessibility intelligence, India statutory compliance, and auto-remediation in your editor.",
+  "version": "0.1.0",
+  "publisher": "accesspilot",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/accesspilot/accesspilot"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.140.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages",
+    "Testing"
+  ],
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "wcag",
+    "rpwd",
+    "gigw",
+    "multi-agent",
+    "linter"
+  ],
+  "activationEvents": [
+    "onLanguage:html",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "accesspilot.scanActiveDocument",
+        "title": "AccessPilot: Scan Active Document",
+        "category": "AccessPilot"
+      },
+      {
+        "command": "accesspilot.runMultiAgent",
+        "title": "AccessPilot: Run Multi-Agent Analysis",
+        "category": "AccessPilot"
+      },
+      {
+        "command": "accesspilot.openDashboard",
+        "title": "AccessPilot: Open Web Dashboard",
+        "category": "AccessPilot"
+      }
+    ],
+    "configuration": {
+      "title": "AccessPilot",
+      "properties": {
+        "accesspilot.apiUrl": {
+          "type": "string",
+          "default": "http://127.0.0.1:8000",
+          "description": "URL of the local or remote AccessPilot backend server."
+        },
+        "accesspilot.autoScanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically run accessibility checks when saving HTML files."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "..\\frontend\\node_modules\\.bin\\tsc -p ./",
+    "watch": "..\\frontend\\node_modules\\.bin\\tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/vscode": "^1.140.0",
+    "typescript": "^5.0.0"
+  }
+}
