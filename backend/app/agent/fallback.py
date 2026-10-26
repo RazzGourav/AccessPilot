@@ -31,7 +31,7 @@ def explain(f: Finding) -> Explanation:
     action = service.SUGGEST_ONLY.get(f.ruleId) or (f"A supported repair ({f.repairTemplate}) is available for review." if f.repairTemplate else "Review against the linked guidance.")
     return Explanation(fingerprint=f.fingerprint, explanation=what, userImpact=who, suggestedAction=action,
                        confidence=1.0 if f.source == "axe" else 0.5, needsHumanReview=f.needsHumanReview or f.source != "axe",
-                       generatedBy="deterministic")
+                       generatedBy="deterministic", suggestedCode=service.SUGGEST_CODE.get(f.ruleId))
 
 
 def run(scan: Scan) -> tuple[list[Explanation], list[RepairProposal], list[dict]]:

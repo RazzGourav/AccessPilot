@@ -16,6 +16,20 @@ SUGGEST_ONLY = {
     "heading-order": "Use heading levels that follow the page outline. This is a content decision for a reviewer.",
 }
 
+SUGGEST_CODE = {
+    "label": '<label for="field-id">Descriptive Label</label>\n<input id="field-id" name="field-name" type="text">',
+    "image-alt": '<img src="path/to/image.jpg" alt="Concise description of the image content or purpose">',
+    "color-contrast": '/* Ensure contrast ratio >= 4.5:1 for normal text (WCAG AA) */\ncolor: #1a1a1a;\nbackground-color: #ffffff;',
+    "html-has-lang": '<html lang="en"> <!-- Use ISO 639-1 code e.g. en, hi, ta -->',
+    "button-name": '<button type="button" aria-label="Action Name">\n  Action Name\n</button>',
+    "landmark-one-main": '<main id="main-content" role="main">\n  <!-- Primary page content goes here -->\n</main>',
+    "region": '<header role="banner">...</header>\n<main role="main">...</main>\n<footer role="contentinfo">...</footer>',
+    "heading-order": '<!-- Ensure sequential hierarchy without skipping: <h1> -> <h2> -> <h3> -->',
+    "kbd-clickable-not-focusable": '<button type="button" class="btn" onclick="handleClick()">\n  Clickable Action\n</button>',
+    "kbd-repeated-focus": '<!-- Avoid cyclical focus traps; allow Tab key to progress forward and Shift+Tab backward -->',
+    "link-name": '<a href="/target" aria-label="Descriptive destination">Read more about topic</a>',
+}
+
 
 def get_scan(scan_id: str) -> Scan:
     scan = store.scans.get(scan_id)

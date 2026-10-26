@@ -19,7 +19,7 @@ Add one row per meaningful Copilot session (Copilot Chat, inline completions, Co
 
 | Date | Who | Task | Prompt summary | What Copilot produced | Tests run | Human edits |
 |------|-----|------|----------------|-----------------------|-----------|-------------|
-| | | | | | | |
+| 2026-10-26 | Copilot SDK in VS Code | Documentation and release preparation | Push the current AccessPilot changes with an updated README and Mermaid system architecture | Added aligned Mermaid architecture diagrams to README and ARCHITECTURE; reviewed the existing worktree and prepared the complete change set for commit/push | 43 backend tests passed; frontend build passed; wording check passed; `git diff --check` passed | Human requested the GitHub push and reviewed the release scope |
 
 ### Suggested Copilot tasks (good evidence, real value)
 - Agent mode: "Add template T6 for `link-name`…" following `.github/copilot-instructions.md`, including the demo defect and a test.

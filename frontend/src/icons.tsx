@@ -1,6 +1,6 @@
 // One outline icon set (14px, 1.75 stroke, currentColor). Icons are decorative: the words beside them
 // carry the meaning, so every icon is aria-hidden (DESIGN.md §10: never colour or glyph alone).
-export type IconName = "check" | "cross" | "alert" | "dot" | "ring" | "clock" | "spark" | "question" | "mark";
+export type IconName = "check" | "cross" | "alert" | "dot" | "ring" | "clock" | "spark" | "question" | "mark" | "speaker" | "play" | "bolt" | "eye";
 
 const PATHS: Record<IconName, JSX.Element> = {
   check: <path d="M3 8.5l3 3 7-7" />,
@@ -13,6 +13,10 @@ const PATHS: Record<IconName, JSX.Element> = {
   question: <><path d="M6.2 6.2a1.9 1.9 0 1 1 2.6 1.8c-.5.2-.8.6-.8 1.1v.4" /><circle cx="8" cy="12" r="0.6" fill="currentColor" /></>,
   // AccessPilot's mark: a focus ring around a check — the product's two halves, evidence and verification.
   mark: <><circle cx="8" cy="8" r="6.25" /><path d="M5.2 8.3l1.9 1.9 3.8-3.9" /></>,
+  speaker: <><path d="M3 6h3l4-3v10l-4-3H3z" /><path d="M13 5.5a4 4 0 0 1 0 5" /></>,
+  play: <path d="M5.5 3.5l7 4.5-7 4.5z" fill="currentColor" stroke="none" />,
+  bolt: <path d="M8.5 2L3.5 9h4.5l-1 5 6-7.5H8.5z" />,
+  eye: <><path d="M2 8s2.5-4.5 6-4.5 6 4.5 6 4.5-2.5 4.5-6 4.5-6-4.5-6-4.5z" /><circle cx="8" cy="8" r="2" /></>,
 };
 
 export function Icon({ name, size = 14 }: { name: IconName; size?: number }) {

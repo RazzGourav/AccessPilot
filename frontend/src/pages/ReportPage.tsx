@@ -39,6 +39,68 @@ export function ReportPage() {
             )}
             <p><a className="btn" href={api.reportUrl(scan.scanId)} download>Download the JSON report</a></p>
           </section>
+
+          {/* Continuous Verification & Audit Trail */}
+          {(() => {
+            const scansInSession = s.events
+              .filter((e): e is { kind: "scan" | "continue"; scan: typeof scan } => e.kind === "scan" || e.kind === "continue")
+              .map((e) => e.scan);
+
+            const initialCount = scansInSession[0]?.violations.length ?? 0;
+
+            return scansInSession.length > 0 ? (
+              <section aria-labelledby="history-h" className="card mb-m">
+                <div className="row spread align-center mb-s">
+                  <h2 id="history-h" className="m-0">Continuous Verification History ({scansInSession.length})</h2>
+                  <span className="muted text-xs">Deterministic audit trail across session runs</span>
+                </div>
+                <table className="table">
+                  <caption className="sr-only">Sequential scan results and barrier reduction trend</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Run</th>
+                      <th scope="col">Target / Copy</th>
+                      <th scope="col">Timestamp</th>
+                      <th scope="col" className="num">Duration</th>
+                      <th scope="col" className="num">Active Barriers</th>
+                      <th scope="col" className="num">Net Change</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {scansInSession.map((sc, idx) => {
+                      const delta = sc.violations.length - initialCount;
+                      return (
+                        <tr key={sc.scanId} className={sc.scanId === scan.scanId ? "current-row" : ""}>
+                          <th scope="row">
+                            #{idx + 1} <code>{sc.scanId.slice(0, 12)}</code>
+                            {sc.scanId === scan.scanId && <span className="chip tone-positive mini">Active</span>}
+                          </th>
+                          <td className="cell-truncate">
+                            {sc.workspaceId ? `Copy ${sc.workspaceId}` : sc.title || sc.finalUrl}
+                          </td>
+                          <td className="num">{sc.createdAt.slice(11, 19)}</td>
+                          <td className="num">{(sc.durationMs / 1000).toFixed(1)}s</td>
+                          <td className="num"><strong>{sc.violations.length}</strong></td>
+                          <td className="num">
+                            {idx === 0 ? (
+                              <span className="muted">Baseline</span>
+                            ) : delta < 0 ? (
+                              <span className="tone-positive"><strong>{delta}</strong> resolved</span>
+                            ) : delta === 0 ? (
+                              <span className="muted">0</span>
+                            ) : (
+                              <span className="pill-warning-ink">+{delta}</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </section>
+            ) : null;
+          })()}
+
           <CoveragePanel coverage={scan.coverage} limitations={scan.limitations} />
         </>
       )}

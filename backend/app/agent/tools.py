@@ -128,10 +128,12 @@ class ToolBox:
         for e in explanations[:MAX_LIST]:
             if e.get("fingerprint") not in self.fps:
                 continue
+            fp_rule = next((f.ruleId for f in self.scan.violations if f.fingerprint == e["fingerprint"]), "")
+            code = str(e.get("suggestedCode"))[:600] if e.get("suggestedCode") else service.SUGGEST_CODE.get(fp_rule)
             conf = float(e.get("confidence", 0))
             out.append(Explanation(
                 fingerprint=e["fingerprint"], explanation=str(e["explanation"])[:600], userImpact=str(e["userImpact"])[:400],
                 suggestedAction=str(e["suggestedAction"])[:400], confidence=max(0.0, min(1.0, conf)),
-                needsHumanReview=conf < 0.5, generatedBy="ai"))
+                needsHumanReview=conf < 0.5, generatedBy="ai", suggestedCode=code))
         self.explanations = out
         return {"ok": True, "accepted": len(out)}

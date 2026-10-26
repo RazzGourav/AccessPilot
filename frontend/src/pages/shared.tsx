@@ -1,11 +1,11 @@
 // Pieces shared by the app pages: live status, empty state, and the results header.
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { api } from "../api";
 import { Summary } from "../components";
 import { Icon } from "../icons";
 import { Link } from "../router";
 import { useSession } from "../session";
-import type { Scan } from "../types";
+import type { Explanation, Scan } from "../types";
 
 export function StatusArea() {
   const { busy, status, error } = useSession();
@@ -21,9 +21,19 @@ export function StatusArea() {
 export function NoScan({ what }: { what: string }) {
   return (
     <section className="card empty" aria-labelledby="empty-h">
-      <h2 id="empty-h">Nothing to show yet</h2>
-      <p>{what} appear here after a scan. Scans are kept in memory for this session only.</p>
-      <p><Link to="/audit" className="btn primary">Start an audit</Link></p>
+      <div className="empty-lead">
+        <div className="empty-icon" aria-hidden="true">
+          <Icon name="clock" size={20} />
+        </div>
+        <div className="empty-body">
+          <h2 id="empty-h">Nothing to show yet</h2>
+          <p>{what} appear here after a scan. Scans and verified working copies are kept in memory for this session.</p>
+          <div className="empty-actions">
+            <Link to="/audit" className="btn primary">Start an audit</Link>
+            <Link to="/how" className="btn">How it works</Link>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -106,3 +116,108 @@ export function useReveal() {
 
 /** Stagger delay for a revealed element. */
 export const delay = (n: number) => ({ "--d": `${n * 80}ms` } as React.CSSProperties);
+
+/** Generates a complete AI prompt tailored for Copilot, Cursor, or Claude Code to fix all detected barriers. */
+export function generateAiFixPrompt(scan: Scan, explanations: Map<string, Explanation>): string {
+  const critical = scan.violations.filter((f) => f.impact === "critical").length;
+  const serious = scan.violations.filter((f) => f.impact === "serious").length;
+  const moderate = scan.violations.filter((f) => f.impact === "moderate").length;
+  const minor = scan.violations.filter((f) => f.impact === "minor").length;
+
+  const header = `# Accessibility Remediation Request (WCAG 2.2 AA Compliance)
+
+Target: ${scan.title || scan.finalUrl}
+URL: ${scan.finalUrl}
+Audit Scope: ${scan.violations.length} total barriers (${critical} critical, ${serious} serious, ${moderate} moderate, ${minor} minor)
+Engine: ${scan.scanner} ${scan.scannerVersion} (WCAG 2.0/2.1/2.2 AA)
+
+## Objective:
+Refactor the affected components to resolve all ${scan.violations.length} barriers listed below according to WCAG 2.2 Level AA guidelines and statutory accessibility standards. Preserve existing layout, design tokens, and application behavior while fixing the code.
+
+---
+
+## Detailed List of Issues to Fix:
+`;
+
+  const items = scan.violations.map((f, idx) => {
+    const ex = explanations.get(f.fingerprint);
+    let item = `### Barrier [${idx + 1}]: ${f.help} (${f.ruleId})
+- Impact: ${f.impact ? f.impact.toUpperCase() : "Review"}
+- Standards: WCAG ${f.wcag.join(", ") || "Best practice"}
+- Target DOM Selector: \`${f.target}\``;
+
+    if (f.snippet) {
+      item += `\n- Current Code Snippet:\n\`\`\`html\n${f.snippet.trim()}\n\`\`\``;
+    }
+    if (f.failureSummary) {
+      item += `\n- Issue Diagnostic: ${f.failureSummary.replace(/\n+/g, " ").trim()}`;
+    }
+    if (ex) {
+      item += `\n- User Impact: ${ex.userImpact}\n- Recommended Action: ${ex.suggestedAction}`;
+      if (ex.suggestedCode) {
+        item += `\n- Suggested Code Replacement:\n\`\`\`html\n${ex.suggestedCode.trim()}\n\`\`\``;
+      }
+    }
+    return item;
+  }).join("\n\n---\n\n");
+
+  const footer = `
+---
+
+## Required Code Adjustments:
+1. Ensure all form controls have explicitly associated visible \`<label for="...">\` tags.
+2. Provide concise, descriptive \`alt\` text for informative images; use \`alt=""\` for decorative assets.
+3. Ensure color contrast reaches at least 4.5:1 for standard text and 3:1 for large text/icons.
+4. Ensure interactive controls use native elements (\`<button>\`, \`<a>\`) or proper \`role\` with keyboard event handlers (Enter/Space).
+5. Prevent keyboard focus cycling traps and ensure clear focus visibility.
+6. Provide complete replacement snippets for the affected files.`;
+
+  return `${header}\n${items}\n${footer}`;
+}
+
+/** Card providing a 1-click copyable prompt for AI assistants (Copilot, Cursor, Claude Code) to fix all findings. */
+export function AiFixPromptCard({ scan }: { scan: Scan }) {
+  const { explanations } = useSession();
+  const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const promptText = useMemo(() => generateAiFixPrompt(scan, explanations), [scan, explanations]);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(promptText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  }
+
+  if (scan.violations.length === 0) return null;
+
+  return (
+    <section className="card ai-prompt-card" aria-labelledby="prompt-card-h">
+      <div className="ai-prompt-header">
+        <div className="ai-prompt-title-group">
+          <span className="badge badge-ai"><Icon name="spark" size={13} /> AI Developer Fix Prompt</span>
+          <h2 id="prompt-card-h" className="ai-prompt-title">Master Prompt to Fix All {scan.violations.length} Issues</h2>
+          <p className="ai-prompt-desc">
+            {scan.repairable
+              ? "Copy this complete prompt directly into Cursor, GitHub Copilot, or Claude Code to refactor your codebase."
+              : "For public URLs: AccessPilot cannot directly modify external code. Copy this complete prompt into your AI assistant to apply all recommended fixes."}
+          </p>
+        </div>
+        <div className="ai-prompt-actions">
+          <button type="button" className="btn primary" onClick={handleCopy}>
+            <Icon name={copied ? "check" : "spark"} size={14} />
+            {copied ? "Copied to clipboard!" : "Copy prompt for AI assistants"}
+          </button>
+          <button type="button" className="btn" onClick={() => setOpen(!open)}>
+            {open ? "Hide prompt preview" : "Preview prompt"}
+          </button>
+        </div>
+      </div>
+      {open && (
+        <div className="ai-prompt-preview">
+          <pre className="code-fix-snippet">{promptText}</pre>
+        </div>
+      )}
+    </section>
+  );
+}

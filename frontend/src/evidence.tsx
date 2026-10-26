@@ -19,7 +19,23 @@ export function markerNumbers(scan: Scan): Map<string, number> {
 
 const pct = (n: number, of: number) => `${(n / of) * 100}%`;
 
-type Mode = "barriers" | "tab";
+type Mode = "barriers" | "tab" | "friction";
+
+function frictionLevel(f: Finding): "severe" | "high" | "moderate" {
+  if (f.ruleId === "kbd-repeated-focus" || f.ruleId === "kbd-clickable-not-focusable" || f.impact === "critical") return "severe";
+  if (f.impact === "serious" || f.ruleId === "label" || f.ruleId === "button-name") return "high";
+  return "moderate";
+}
+
+function frictionLabel(f: Finding): string {
+  if (f.ruleId === "kbd-repeated-focus") return "Focus Trap";
+  if (f.ruleId === "kbd-clickable-not-focusable") return "Blocked Tab";
+  if (f.ruleId === "label") return "Unlabeled Input";
+  if (f.ruleId === "button-name") return "Silent Button";
+  if (f.ruleId === "color-contrast") return "Contrast Strain";
+  if (f.ruleId === "image-alt") return "Missing Alt";
+  return f.ruleId;
+}
 
 export function PageView({ scan, selected, onSelect }: { scan: Scan; selected: string | null; onSelect: (f: Finding) => void }) {
   const [mode, setMode] = useState<Mode>("barriers");
@@ -27,6 +43,7 @@ export function PageView({ scan, selected, onSelect }: { scan: Scan; selected: s
   if (!page) return null;
   const numbers = markerNumbers(scan);
   const marked = scan.violations.filter((f) => numbers.has(f.fingerprint));
+  const frictionNodes = scan.violations.filter((f) => f.box);
   const steps = scan.keyboardWalk.steps.filter((s) => s.box);
   const unreachable = scan.violations.filter((f) => f.ruleId === "kbd-clickable-not-focusable" && f.box);
   const centre = (b: Box) => [b.x + b.w / 2, b.y + b.h / 2];
@@ -50,10 +67,15 @@ export function PageView({ scan, selected, onSelect }: { scan: Scan; selected: s
         <div className="seg" role="group" aria-label="Overlay">
           <button type="button" aria-pressed={mode === "barriers"} onClick={() => setMode("barriers")}>Barriers ({marked.length})</button>
           <button type="button" aria-pressed={mode === "tab"} onClick={() => setMode("tab")}>Tab order ({steps.length})</button>
+          <button type="button" aria-pressed={mode === "friction"} onClick={() => setMode("friction")}>Friction Heatmap ({frictionNodes.length})</button>
         </div>
       </div>
       <p className="muted pv-caption">
-        {mode === "barriers" ? "Select a marker to view finding details." : `${steps.length} keyboard stops · Unreachable controls highlighted`}
+        {mode === "barriers"
+          ? "Select a marker to view finding details."
+          : mode === "tab"
+          ? `${steps.length} keyboard stops · Unreachable controls highlighted`
+          : `Friction Heatmap: ${frictionNodes.length} interaction friction hotspots detected across user journey.`}
       </p>
       <div className="pv-frame">
         <div className="pv-canvas" style={{ aspectRatio: `${page.width} / ${page.height}` }}>
@@ -88,6 +110,21 @@ export function PageView({ scan, selected, onSelect }: { scan: Scan; selected: s
               })}
             </>
           )}
+          {mode === "friction" && frictionNodes.map((f) => {
+            const lvl = frictionLevel(f);
+            const lbl = frictionLabel(f);
+            return (
+              <div
+                key={f.fingerprint}
+                className={`pv-friction-hotspot level-${lvl}${selected === f.fingerprint ? " on" : ""}`}
+                style={boxStyle(f.box!)}
+                onClick={() => onSelect(f)}
+                title={`${lbl} (${lvl} friction): Click to view finding`}
+              >
+                <span className={`pv-friction-pill level-${lvl}`}>{lbl}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
       {page.truncated && <p className="muted pv-caption">The capture stops at {page.height} px; findings further down are only in the list.</p>}

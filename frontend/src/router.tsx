@@ -11,6 +11,7 @@ export const ROUTES = {
   "/repairs": "Repairs",
   "/experience": "Lived Experience",
   "/dashboard": "Impact & Compliance",
+  "/roi": "Business ROI & Legal Exposure",
   "/report": "Report",
   "/accessibility": "Accessibility statement",
 } as const;

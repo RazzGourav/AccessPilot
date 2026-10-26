@@ -11,6 +11,32 @@ PLAN → AUDIT (axe-core) → BEHAVIOUR (keyboard walk) → EXPLAIN + PROPOSE (a
      → HUMAN APPROVAL → APPLY IN ISOLATED COPY → VERIFY (same checks + control-page gate) → REPORT
 ```
 
+## System architecture
+
+```mermaid
+flowchart LR
+    Browser["React UI<br/>Vite build"] <-->|HTTP/JSON /api| API["FastAPI<br/>app/main.py"]
+
+    API --> Policy["policy.py<br/>consent + URL/navigation guard"]
+    API --> Scanner["scanner.py<br/>Playwright sync API<br/>axe + keyboard + evidence"]
+    API --> Agent["agent/<br/>bounded tools + optional model<br/>deterministic fallback"]
+    API --> Fixer["fixer/<br/>templates + working copies"]
+    API --> Store[("store.py<br/>in-memory state")]
+
+    Scanner --> Scan[("Scan + fingerprint")]
+    Scan --> Agent
+    Agent --> Proposal["Repair proposal<br/>diff + single-use approval token"]
+    Proposal -->|human approval| Fixer
+    Fixer --> Verify["verifier.py<br/>re-scan copy + control page<br/>model-free"]
+    Verify --> Report["resolved / remaining / new<br/>report + timeline"]
+    Report --> Browser
+
+    Demo["demo/<br/>Golden Site + control page"] --> Scanner
+    Fixer -.->|never writes original| Demo
+```
+
+The MVP is one local FastAPI process. Browser work and model calls run in the server threadpool; the verifier never imports agent or model code, and repairs are applied only to allowlisted files in isolated working copies after explicit approval.
+
 ## Project documents
 
 | Document | Purpose |

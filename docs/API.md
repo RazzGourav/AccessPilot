@@ -94,7 +94,7 @@ Request `{ "scanId": "scan_…" }` → `AgentRun`:
 ```json
 { "scanId": "scan_…", "aiUsed": true, "model": "openai/gpt-4.1-mini", "fallbackReason": "",
   "explanations": [{ "fingerprint": "…", "explanation": "…", "userImpact": "…", "suggestedAction": "…",
-                     "confidence": 0.9, "needsHumanReview": false, "generatedBy": "ai" }],
+                     "confidence": 0.9, "needsHumanReview": false, "generatedBy": "ai", "suggestedCode": "…" }],
   "proposals": [ /* RepairProposal[] */ ],
   "needsHuman": [{ "fingerprint": "…", "reason": "…", "by": "ai" }],
   "trace": [{ "step": "llm_turn_1", "status": "ok", "durationMs": 812, "detail": "1 tool call(s)" },

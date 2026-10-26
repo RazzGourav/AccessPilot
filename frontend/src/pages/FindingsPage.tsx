@@ -5,13 +5,21 @@ import { Icon } from "../icons";
 import { Page } from "../router";
 import { useSession } from "../session";
 import type { Finding } from "../types";
-import { NoScan, PageHero, ScanFacts, StatusArea } from "./shared";
+import { AiFixPromptCard, NoScan, PageHero, ScanFacts, StatusArea } from "./shared";
 
 export function FindingsPage() {
   const s = useSession();
   const { scan, busy, selected } = s;
   const [impactFilter, setImpactFilter] = useState("all");
   const [sourceFilter, setSourceFilter] = useState("all");
+  const [copiedFp, setCopiedFp] = useState<string | null>(null);
+
+  function copyCode(fp: string, code: string) {
+    navigator.clipboard.writeText(code);
+    setCopiedFp(fp);
+    setTimeout(() => setCopiedFp(null), 2000);
+  }
+
   const numbers = useMemo(() => (scan ? markerNumbers(scan) : new Map<string, number>()), [scan]);
   const groups = useMemo(() => {
     const out = new Map<string, Finding[]>();
@@ -32,6 +40,7 @@ export function FindingsPage() {
       <StatusArea />
       {!scan ? <NoScan what="Findings" /> : (
         <>
+          <AiFixPromptCard scan={scan} />
           <section aria-labelledby="findings-h" className="card findings">
             <h2 id="findings-h">{scan.violations.length} findings on {scan.title || scan.finalUrl}</h2>
             <div className="filters">
@@ -69,6 +78,17 @@ export function FindingsPage() {
                             {ex.needsHumanReview && " · needs human review"}</p>
                           <p>{ex.explanation} {ex.userImpact}</p>
                           <p><strong>Suggested:</strong> {ex.suggestedAction}</p>
+                          {ex.suggestedCode && (
+                            <div className="code-fix-suggestion">
+                              <div className="code-fix-head">
+                                <span className="code-fix-title">Code fix recommendation:</span>
+                                <button type="button" className="chip mini" onClick={() => copyCode(f.fingerprint, ex.suggestedCode!)}>
+                                  {copiedFp === f.fingerprint ? "Copied!" : "Copy fix snippet"}
+                                </button>
+                              </div>
+                              <pre className="code-fix-snippet">{ex.suggestedCode}</pre>
+                            </div>
+                          )}
                         </div>
                       )}
                       {scan.repairable && f.repairTemplate ? (

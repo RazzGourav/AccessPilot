@@ -2,7 +2,7 @@ import { PageView } from "../evidence";
 import { Link, Page } from "../router";
 import { useSession } from "../session";
 import { Timeline } from "../timeline";
-import { PageHero, ResultsHeader, ScanFacts, StatusArea } from "./shared";
+import { AiFixPromptCard, PageHero, ResultsHeader, ScanFacts, StatusArea } from "./shared";
 
 export function AuditPage() {
   const s = useSession();
@@ -18,7 +18,7 @@ export function AuditPage() {
           <form className="intake" onSubmit={(e) => { e.preventDefault(); s.startScan(); }}>
             <label htmlFor="url" className="sr-only">Page URL</label>
             <div className="row">
-              <input id="url" type="url" required placeholder="https://example.com" value={s.url} onChange={(e) => s.setUrl(e.target.value)} aria-describedby="url-help" />
+              <input id="url" type="url" required placeholder="https://www.w3.org/WAI/demos/bad/before/home.html" value={s.url} onChange={(e) => s.setUrl(e.target.value)} aria-describedby="url-help" />
               <button type="submit" className={scan ? "" : "primary"} disabled={busy !== null}>{busy === "scan" ? "Scanning…" : scan ? "Scan again" : "Scan"}</button>
             </div>
             <div className="intake-footer">
@@ -26,15 +26,30 @@ export function AuditPage() {
                 <input id="auth" type="checkbox" checked={s.authorized} onChange={(e) => s.setAuthorized(e.target.checked)} />
                 <label htmlFor="auth">Authorised test target</label>
               </div>
-              {health && (
-                <div className="quick-targets" id="url-help">
-                  <span className="muted">Fixtures:</span>
-                  <button type="button" className="chip" onClick={() => s.setUrl(health.demoUrl)}>Golden Site (D01–D10)</button>
-                  <button type="button" className="chip" onClick={() => s.setUrl(health.controlUrl)}>Control Page</button>
-                </div>
-              )}
+              <div className="quick-targets" id="url-help">
+                <span className="muted">Fixtures:</span>
+                {health && (
+                  <>
+                    <button type="button" className="chip" onClick={() => { s.setUrl(health.demoUrl); s.setAuthorized(true); }}>Golden Site (D01–D10)</button>
+                    <button type="button" className="chip" onClick={() => { s.setUrl(health.controlUrl); s.setAuthorized(true); }}>Control Page</button>
+                  </>
+                )}
+                <span className="muted">Public sites:</span>
+                <button type="button" className="chip" onClick={() => { s.setUrl("https://www.w3.org/WAI/demos/bad/before/home.html"); s.setAuthorized(true); }}>W3C Bad Demo</button>
+                <button type="button" className="chip" onClick={() => { s.setUrl("https://en.wikipedia.org/wiki/Web_accessibility"); s.setAuthorized(true); }}>Wikipedia A11y</button>
+              </div>
             </div>
           </form>
+          {scan && (
+            <div className="target-mode-banner">
+              <span className={`chip ${scan.repairable ? "tone-positive" : "tone-neutral"}`}>
+                {scan.repairable ? "Interactive Sandbox (Auto-Patch Supported)" : "Public Target (Read-only Scan & Suggested Fixes)"}
+              </span>
+              <span className="muted">
+                {scan.repairable ? "Safe isolated working copy available for automated patching & verification." : "External website. AccessPilot provides code fixes to copy & paste."}
+              </span>
+            </div>
+          )}
         </section>
 
         <StatusArea />
@@ -42,6 +57,7 @@ export function AuditPage() {
         {scan && (
           <>
             <ResultsHeader scan={scan} />
+            <AiFixPromptCard scan={scan} />
             <div className="layout">
               <div className="main-col">
                 <PageView scan={scan} selected={s.selected} onSelect={s.showFinding} />

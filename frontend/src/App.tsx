@@ -22,6 +22,7 @@ const PAGES: Record<Path, () => JSX.Element> = {
   "/repairs": RepairsPage,
   "/experience": ExperiencePage,
   "/dashboard": DashboardPage,
+  "/roi": DashboardPage,
   "/report": ReportPage,
   "/accessibility": A11yPage,
 };
@@ -37,7 +38,7 @@ function Nav() {
     ["/findings", "Findings", scan ? String(scan.violations.length) : null],
     ["/repairs", "Repairs", waiting.length ? `${waiting.length} waiting` : null],
     ["/experience", "Experience", null],
-    ["/dashboard", "Dashboard", null],
+    ["/dashboard", "Impact & ROI", null],
     ["/report", "Report", null],
   ];
   return (

@@ -26,25 +26,29 @@ Deliberately **not** used: a database server, an ORM, Redux or other state libra
 
 ## 3. Components
 
+```mermaid
+flowchart LR
+    Browser["React UI<br/>Vite build"] <-->|HTTP/JSON /api| API["FastAPI<br/>app/main.py"]
+
+    API --> Policy["policy.py<br/>consent + URL/navigation guard"]
+    API --> Scanner["scanner.py<br/>Playwright sync API<br/>axe + keyboard + evidence"]
+    API --> Agent["agent/<br/>bounded tools + optional model<br/>deterministic fallback"]
+    API --> Fixer["fixer/<br/>templates + working copies"]
+    API --> Store[("store.py<br/>in-memory state")]
+
+    Scanner --> Scan[("Scan + fingerprint")]
+    Scan --> Agent
+    Agent --> Proposal["Repair proposal<br/>diff + single-use approval token"]
+    Proposal -->|human approval| Fixer
+    Fixer --> Verify["verifier.py<br/>re-scan copy + control page<br/>model-free"]
+    Verify --> Report["resolved / remaining / new<br/>report + timeline"]
+    Report --> Browser
+
+    Demo["demo/<br/>Golden Site + control page"] --> Scanner
+    Fixer -.->|never writes original| Demo
 ```
-┌──────────────────────┐   HTTP/JSON (/api/*)   ┌───────────────────────────────────────────────┐
-│ React UI (Vite build)│ ─────────────────────▶ │ FastAPI  app/main.py                           │
-│ App.tsx, components  │ ◀───────────────────── │  error handler · request models · static mounts│
-└──────────────────────┘                        └──┬──────────┬───────────┬──────────┬─────────┘
-                                                   │          │           │          │
-                                       ┌───────────▼───┐ ┌────▼──────┐ ┌──▼───────┐ ┌▼──────────────┐
-                                       │ policy.py     │ │ scanner.py│ │ agent/   │ │ fixer/        │
-                                       │ consent, URL, │ │ Playwright│ │ runner   │ │ templates T1–5│
-                                       │ host checks   │ │ axe, norm.│ │ tools    │ │ workspace     │
-                                       └───────────────┘ │ keyboard  │ │ llm      │ │ service       │
-                                                         │ coverage  │ │ fallback │ └──────┬────────┘
-                                                         └─────▲─────┘ └──────────┘        │ approved only
-                                                               │                    ┌──────▼────────┐
-                                                               └────────────────────│ verifier.py   │
-                                                                re-scan copy+control│ (no model)    │
-                                                                                    └───────────────┘
-                                         store.py (in-memory)  ·  fingerprint.py  ·  models.py
-```
+
+The diagram shows the runtime boundary. `app/main.py` serves the built UI and API from one local process; long browser and model operations are dispatched through FastAPI's threadpool. `verifier.py` is intentionally model-free, and the fixer can only modify allowlisted files in isolated working copies after approval.
 
 | Module | Responsibility |
 |--------|----------------|

@@ -90,7 +90,7 @@ def run_scan(url: str, *, with_keyboard: bool = True, repairable: bool = False, 
             page = context.new_page()
             page.route("**/*", guard)
             try:
-                tr.run("page_loaded", lambda: page.goto(url, wait_until="load", timeout=config.NAV_TIMEOUT_MS),
+                tr.run("page_loaded", lambda: page.goto(url, wait_until="domcontentloaded", timeout=config.NAV_TIMEOUT_MS),
                        detail=lambda r: f"HTTP {r.status}" if r else "")
             except PlaywrightTimeout as exc:
                 raise APIError("scan_timeout", "The page did not finish loading within the scan budget.", 504) from exc

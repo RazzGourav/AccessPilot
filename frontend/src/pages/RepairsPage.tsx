@@ -23,22 +23,70 @@ export function RepairsPage() {
         <div className="layout">
           <div className="main-col">
             <section aria-labelledby="queue-h" className="card">
-              <h2 id="queue-h">Waiting for review ({s.waiting.length})</h2>
-              {s.waiting.length === 0 ? (
-                <p className="muted">{s.agentRan ? "No fixes are waiting." : <>No fixes yet. <Link to="/audit">Run the agent on the Audit page</Link> to draft them.</>}</p>
-              ) : (
-                <ul className="queue">
-                  {s.waiting.map((p) => (
-                    <li key={p.proposalId} className={proposal?.proposalId === p.proposalId ? "on" : ""}>
-                      <span className="queue-main"><strong>{s.findingFor(p.fingerprint)?.help ?? p.fingerprint}</strong>
-                        <span className="muted"><code>{s.findingFor(p.fingerprint)?.target}</code> · template {p.template}{p.needsHumanEdit.length > 0 && " · wording to check"}</span></span>
-                      <button type="button" onClick={() => s.openProposal(p)} disabled={busy !== null} aria-pressed={proposal?.proposalId === p.proposalId}>
-                        Review<span className="sr-only"> {s.findingFor(p.fingerprint)?.help}</span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <div className="row spread align-center mb-s">
+                <h2 id="queue-h" className="m-0">Waiting for review ({s.waiting.length})</h2>
+                {s.waiting.length > 0 && (
+                  <span className="muted text-xs">Human approval gate · 1-click re-test verification</span>
+                )}
+              </div>
+              {(() => {
+                const safeFixes = s.waiting.filter((p) => p.risk === "low" && p.needsHumanEdit.length === 0);
+                return (
+                  <>
+                    {safeFixes.length > 0 && (
+                      <div className="safe-batch-card">
+                        <div>
+                          <span className="safe-batch-title">
+                            <Icon name="check" size={13} /> {safeFixes.length} Safe Low-Risk Proposal{safeFixes.length > 1 ? "s" : ""}
+                          </span>
+                          <p className="safe-batch-sub">
+                            Deterministic template matches without ambiguous human wording.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          className="chip tone-positive"
+                          onClick={() => s.openProposal(safeFixes[0])}
+                          disabled={busy !== null}
+                        >
+                          Review First Safe Fix
+                        </button>
+                      </div>
+                    )}
+                    {s.waiting.length === 0 ? (
+                      <p className="muted">{s.agentRan ? "No fixes are waiting." : <>No fixes yet. <Link to="/audit">Run the agent on the Audit page</Link> to draft them.</>}</p>
+                    ) : (
+                      <ul className="queue">
+                        {s.waiting.map((p) => {
+                          const isSafe = p.risk === "low" && p.needsHumanEdit.length === 0;
+                          return (
+                            <li key={p.proposalId} className={proposal?.proposalId === p.proposalId ? "on" : ""}>
+                              <span className="queue-main">
+                                <strong>{s.findingFor(p.fingerprint)?.help ?? p.fingerprint}</strong>
+                                <span className="muted">
+                                  <code>{s.findingFor(p.fingerprint)?.target}</code> · template {p.template}
+                                  {isSafe ? (
+                                    <span className="chip tone-positive mini">
+                                      <Icon name="check" size={10} /> Low-Risk
+                                    </span>
+                                  ) : (
+                                    <span className="chip mini">
+                                      <Icon name="spark" size={10} /> Wording check
+                                    </span>
+                                  )}
+                                </span>
+                              </span>
+                              <button type="button" onClick={() => s.openProposal(p)} disabled={busy !== null} aria-pressed={proposal?.proposalId === p.proposalId}>
+                                Review<span className="sr-only"> {s.findingFor(p.fingerprint)?.help}</span>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    )}
+                  </>
+                );
+              })()}
             </section>
 
             <section aria-labelledby="done-h" className="card">

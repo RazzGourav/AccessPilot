@@ -168,7 +168,7 @@ def workspace_file(wid: str, name: str):
 
 # The UI's pages (frontend/src/router.tsx ROUTES). Only these serve index.html, so a deep link or a
 # reload works while any other unknown path still returns a real 404.
-SITE_PAGES = {"how-it-works", "audit", "findings", "repairs", "report", "accessibility", "dashboard", "experience"}
+SITE_PAGES = {"how-it-works", "audit", "findings", "repairs", "report", "accessibility", "dashboard", "experience", "roi"}
 
 
 @app.get("/{page}", include_in_schema=False)

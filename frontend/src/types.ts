@@ -24,6 +24,7 @@ export interface Coverage {
 export interface Explanation {
   fingerprint: string; explanation: string; userImpact: string; suggestedAction: string;
   confidence: number; needsHumanReview: boolean; generatedBy: "ai" | "deterministic";
+  suggestedCode?: string;
 }
 
 export interface Scan {
