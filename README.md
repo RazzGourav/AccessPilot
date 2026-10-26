@@ -1,6 +1,14 @@
 # AccessPilot — Agentic Accessibility Auditor & Verified Fixer
 
-> Don’t just detect barriers. Fix them, verify them, and prove the difference.
+> Building a Web That Leaves No One Behind.
+
+AccessPilot is an agentic accessibility auditor and verified fixer for web teams
+that want to move beyond a checklist. It combines deterministic browser
+evidence, keyboard behaviour checks, optional AI guidance, human approval, and
+an automated re-test so every suggested repair is explainable and measurable.
+
+The goal is simple: help teams find barriers earlier, understand who they
+affect, make safer fixes, and build web experiences that work for more people.
 
 Built for the Microsoft Agentic AI Hackathon (RUVERSE TechFest 2026), problem statement **Automated Accessibility Checker**.
 
